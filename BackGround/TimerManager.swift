@@ -58,12 +58,12 @@ class TimerManager: ObservableObject {
         dispatchTimer?.resume()
         
         // 同时使用 Timer 用于 UI 更新
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            self?.updateTimer()
-        }
-        
-        // 将定时器添加到 RunLoop 中
-        RunLoop.main.add(timer!, forMode: .common)
+//        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+//            self?.updateTimer()
+//        }
+//        
+//        // 将定时器添加到 RunLoop 中
+//        RunLoop.main.add(timer!, forMode: .common)
         
         // 设置后台倒计时通知
         scheduleBackgroundNotifications()
@@ -100,7 +100,7 @@ class TimerManager: ObservableObject {
     
     // 更新倒计时
     private func updateTimer() {
-        print("time decr")
+        print("time decr", timeRemaining)
         if timeRemaining > 0 {
             timeRemaining -= 1
         } else {
@@ -224,6 +224,7 @@ class TimerManager: ObservableObject {
     
     // 应用进入后台时的处理
     func applicationDidEnterBackground() {
+        print("app to background")
         if isRunning && !isPaused {
             // 保存当前状态到 UserDefaults
             UserDefaults.standard.set(timeRemaining, forKey: "timeRemaining")
@@ -236,6 +237,7 @@ class TimerManager: ObservableObject {
     
     // 应用进入前台时的处理
     func applicationWillEnterForeground() {
+        print("app to forground")
         if isRunning && !isPaused {
             // 从 UserDefaults 恢复状态
             let savedTimeRemaining = UserDefaults.standard.double(forKey: "timeRemaining")
